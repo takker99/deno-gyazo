@@ -87,6 +87,13 @@ export const checkResponse = async (
   const text = await response.text();
   if (response.ok) return { ok: true, value: text };
 
+  if (response.status === 400) {
+    return {
+      ok: false,
+      value: { name: "BadRequestError", message: text },
+    };
+  }
+
   try {
     const json: unknown = JSON.parse(text);
     if (!isObject(json) || typeof json.message !== "string") {
@@ -99,11 +106,6 @@ export const checkResponse = async (
     }
 
     switch (response.status) {
-      case 400:
-        return {
-          ok: false,
-          value: { name: "BadRequestError", message: json.message },
-        };
       case 401:
         return {
           ok: false,
