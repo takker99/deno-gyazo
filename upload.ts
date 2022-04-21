@@ -34,6 +34,30 @@ export interface UploadInit extends OAuthOptions {
   app?: string;
 }
 
+/** the result of `upload()`
+ *
+ * this includes URLs of the uploaded image
+ */
+export interface UploadResult {
+  /** image id */
+  image_id: string;
+
+  /** permalink url */
+  permalink_url: string;
+
+  /** image  url */
+  url: string;
+
+  /** file extension */
+  type: "png" | "jpg";
+
+  /** thumbnail url */
+  thumb_url: string;
+
+  /** timestamp which the image is created at */
+  created_at: Timestamp;
+}
+
 /** Gyazoへ画像をuploadする
  *
  * For more informaion, see https://gyazo.com/api/docs/image#upload
@@ -44,7 +68,7 @@ export interface UploadInit extends OAuthOptions {
 export const upload = async (
   image: Blob,
   init: UploadInit,
-): Promise<Result<unknown, GyazoAPIError>> => {
+): Promise<Result<UploadResult, GyazoAPIError>> => {
   const {
     title,
     description,
