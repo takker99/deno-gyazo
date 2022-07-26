@@ -38,7 +38,7 @@ export interface Image {
     original_url: string | null;
   };
   /** file extension */
-  type: "jpg";
+  type: string;
   /** thumbnail url */
   thumb_url: string;
   /** timestamp which the image is created at */
