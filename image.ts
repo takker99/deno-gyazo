@@ -38,7 +38,7 @@ export interface Image {
     original_url: string | null;
   };
   /** file extension */
-  type: "jpg";
+  type: string;
   /** thumbnail url */
   thumb_url: string;
   /** timestamp which the image is created at */
@@ -130,4 +130,30 @@ export const getImages = async (
     ok: true,
     value: { images, count, page: currentPage, per: perPage, userType },
   };
+};
+
+/** delete an image
+ *
+ * @param imageId image id
+ * @param init accessTokeなど
+ */
+export const deleteImage = async (
+  imageId: string,
+  init: OAuthOptions,
+): Promise<
+  Result<
+    Pick<Image, "image_id" | "type">,
+    GyazoAPIError
+  >
+> => {
+  const { accessToken, fetch } = setDefaults(init ?? {});
+
+  const path =
+    `https://api.gyazo.com/api/images/${imageId}?access_token=${accessToken}`;
+  const res = await fetch(path, { method: "DELETE" });
+
+  const checked = await checkResponse(res);
+  if (!checked.ok) return checked;
+
+  return { ok: true, value: JSON.parse(checked.value) };
 };
