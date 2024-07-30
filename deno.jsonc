@@ -1,6 +1,6 @@
 {
   "name": "@takker/gyazo",
-  "version": "0.2.1",
+  "version": "0.0.0",
   "tasks": {
     // cf. https://github.com/jsr-core/unknownutil/blob/v3.18.1/deno.jsonc
     "check": "deno check --remote **/*.ts",
