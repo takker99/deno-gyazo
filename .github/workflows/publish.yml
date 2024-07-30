@@ -23,4 +23,4 @@ jobs:
         with:
           deno-version: ${{ env.DENO_VERSION }}
       - name: Publish on tag
-        run: deno run --allow-env --allow-run=deno --allow-read jsr:@david/publish-on-tag@0.1.x
+        run: deno task publish
