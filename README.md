@@ -1,5 +1,6 @@
 # deno-gyazo
 
-Gyazo API wrapper for Deno
+[![JSR](https://jsr.io/badges/@takker/gyazo)](https://jsr.io/@takker/gyazo)
+[![test](https://github.com/takker99/deno-gyazo/workflows/ci/badge.svg)](https://github.com/takker99/deno-gyazo/actions?query=workflow%3Aci)
 
-[document](https://doc.deno.land/https://raw.githubusercontent.com/takker99/deno-gyazo/0.2.0/mod.ts)
+Gyazo API wrapper for Deno/web browser
