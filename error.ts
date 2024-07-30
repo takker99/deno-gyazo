@@ -1,4 +1,4 @@
-import { isObject, Result } from "./util.ts";
+import { isObject, type Result } from "./util.ts";
 
 export class UnexpectedResponseError extends Error {
   name = "UnexpectedResponseError";

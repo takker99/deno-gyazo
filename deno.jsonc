@@ -1,0 +1,15 @@
+{
+  "name": "@takker/gyazo",
+  "version": "0.2.1",
+  "tasks": {
+    // cf. https://github.com/jsr-core/unknownutil/blob/v3.18.1/deno.jsonc
+    "check": "deno check --remote **/*.ts",
+    "fmt": "deno fmt",
+    "lint": "deno lint",
+    "check:all": "deno task fmt && deno task lint && deno task check",
+    "update": "deno run --allow-env --allow-read --allow-write=. --allow-run=git,deno --allow-net=jsr.io,registry.npmjs.org jsr:@molt/cli ./*.ts",
+    "update:commit": "deno task -q update --commit --pre-commit=fmt,lint"
+  },
+  "imports": {},
+  "exports": "./mod.ts"
+}

@@ -1,5 +1,10 @@
-import { OAuthOptions, Result, setDefaults, Timestamp } from "./util.ts";
-import { checkResponse, GyazoAPIError } from "./error.ts";
+import {
+  type OAuthOptions,
+  type Result,
+  setDefaults,
+  type Timestamp,
+} from "./util.ts";
+import { checkResponse, type GyazoAPIError } from "./error.ts";
 
 /** metadata and access tokens */
 export interface UploadInit extends OAuthOptions {

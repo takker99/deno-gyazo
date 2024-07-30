@@ -1,5 +1,5 @@
-import { OAuthOptions, Result, setDefaults } from "./util.ts";
-import { checkResponse, GyazoAPIError } from "./error.ts";
+import { type OAuthOptions, type Result, setDefaults } from "./util.ts";
+import { checkResponse, type GyazoAPIError } from "./error.ts";
 
 /** Gyazo account profile */
 export interface Profile {
