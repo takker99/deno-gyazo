@@ -1,5 +1,6 @@
-import { type OAuthOptions, type Result, setDefaults } from "./util.ts";
+import { type OAuthOptions, setDefaults } from "./util.ts";
 import { checkResponse, type GyazoAPIError } from "./error.ts";
+import { createOk, isErr, type Result, unwrapOk } from "result";
 
 /** Gyazo account profile */
 export interface Profile {
@@ -26,6 +27,6 @@ export const getProfile = async (
   const res = await fetch(path);
 
   const checked = await checkResponse(res);
-  if (!checked.ok) return checked;
-  return { ok: true, value: JSON.parse(checked.value) as Profile };
+  if (isErr(checked)) return checked;
+  return createOk(JSON.parse(unwrapOk(checked)) as Profile);
 };

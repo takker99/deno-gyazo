@@ -1,10 +1,6 @@
-import {
-  type OAuthOptions,
-  type Result,
-  setDefaults,
-  type Timestamp,
-} from "./util.ts";
+import { type OAuthOptions, setDefaults, type Timestamp } from "./util.ts";
 import { checkResponse, type GyazoAPIError } from "./error.ts";
+import { createOk, isErr, type Result, unwrapOk } from "result";
 
 /** Image data */
 export interface Image {
@@ -71,9 +67,9 @@ export const getImage = async (
   const res = await fetch(path);
 
   const checked = await checkResponse(res);
-  if (!checked.ok) return checked;
+  if (isErr(checked)) return checked;
 
-  return { ok: true, value: JSON.parse(checked.value) };
+  return createOk(JSON.parse(unwrapOk(checked)) as Image);
 };
 
 /** the options for `getImages()` */
@@ -123,18 +119,15 @@ export const getImages = async (
   const res = await fetch(path);
 
   const checked = await checkResponse(res);
-  if (!checked.ok) return checked;
+  if (isErr(checked)) return checked;
 
-  const images: Image[] = JSON.parse(checked.value);
+  const images: Image[] = JSON.parse(unwrapOk(checked));
   const count = parseInt(res.headers.get("X-Total-Count") ?? "0");
   const currentPage = parseInt(res.headers.get("X-Current-Page") ?? "0");
   const perPage = parseInt(res.headers.get("X-Per-Page") ?? "0");
   const userType = res.headers.get("X-User-Type") ?? "";
 
-  return {
-    ok: true,
-    value: { images, count, page: currentPage, per: perPage, userType },
-  };
+  return createOk({ images, count, page: currentPage, per: perPage, userType });
 };
 
 /** delete an image
@@ -158,7 +151,9 @@ export const deleteImage = async (
   const res = await fetch(path, { method: "DELETE" });
 
   const checked = await checkResponse(res);
-  if (!checked.ok) return checked;
+  if (isErr(checked)) return checked;
 
-  return { ok: true, value: JSON.parse(checked.value) };
+  return createOk(
+    JSON.parse(unwrapOk(checked)) as Pick<Image, "image_id" | "type">,
+  );
 };

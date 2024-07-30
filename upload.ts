@@ -1,10 +1,6 @@
-import {
-  type OAuthOptions,
-  type Result,
-  setDefaults,
-  type Timestamp,
-} from "./util.ts";
+import { type OAuthOptions, setDefaults, type Timestamp } from "./util.ts";
 import { checkResponse, type GyazoAPIError } from "./error.ts";
+import { createOk, isErr, type Result, unwrapOk } from "result";
 
 /** metadata and access tokens */
 export interface UploadInit extends OAuthOptions {
@@ -108,6 +104,6 @@ export const upload = async (
   );
 
   const checked = await checkResponse(res);
-  if (!checked.ok) return checked;
-  return { ok: true, value: JSON.parse(checked.value) };
+  if (isErr(checked)) return checked;
+  return createOk(JSON.parse(unwrapOk(checked)) as UploadResult);
 };

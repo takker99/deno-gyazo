@@ -1,4 +1,5 @@
-import { isObject, type Result } from "./util.ts";
+import { isObject } from "./util.ts";
+import { createErr, createOk, type Result } from "result";
 
 export class UnexpectedResponseError extends Error {
   name = "UnexpectedResponseError";
@@ -85,13 +86,10 @@ export const checkResponse = async (
   >
 > => {
   const text = await response.text();
-  if (response.ok) return { ok: true, value: text };
+  if (response.ok) return createOk(text);
 
   if (response.status === 400) {
-    return {
-      ok: false,
-      value: { name: "BadRequestError", message: text },
-    };
+    return createErr({ name: "BadRequestError", message: text });
   }
 
   try {
@@ -107,30 +105,18 @@ export const checkResponse = async (
 
     switch (response.status) {
       case 401:
-        return {
-          ok: false,
-          value: { name: "UnauthorizedError", message: json.message },
-        };
+        return createErr({ name: "UnauthorizedError", message: json.message });
       case 403:
-        return {
-          ok: false,
-          value: { name: "NotPrivilegeError", message: json.message },
-        };
+        return createErr({ name: "NotPrivilegeError", message: json.message });
       case 404:
-        return {
-          ok: false,
-          value: { name: "NotFoundError", message: json.message },
-        };
+        return createErr({ name: "NotFoundError", message: json.message });
       case 422:
-        return {
-          ok: false,
-          value: { name: "InvalidParameterError", message: json.message },
-        };
+        return createErr({
+          name: "InvalidParameterError",
+          message: json.message,
+        });
       case 429:
-        return {
-          ok: false,
-          value: { name: "RateLimitError", message: json.message },
-        };
+        return createErr({ name: "RateLimitError", message: json.message });
       default:
         throw new UnexpectedResponseError({
           status: response.status,
