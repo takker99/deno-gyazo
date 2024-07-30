@@ -1,8 +1,5 @@
 export type Timestamp = string;
 
-/** 正常値と異常値を格納する型 */
-export type Result<T, E> = { ok: true; value: T } | { ok: false; value: E };
-
 /** networkからdataをとってくる処理
  *
  * interfaceは`fetch()`と同じ

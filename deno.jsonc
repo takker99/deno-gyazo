@@ -11,6 +11,6 @@
     "update:commit": "deno task -q update --commit --pre-commit=fmt,lint",
     "publish": "deno run --allow-env --allow-run=deno --allow-read --allow-write=deno.jsonc jsr:@david/publish-on-tag@0.1.x"
   },
-  "imports": {},
+  "imports": { "result": "npm:option-t@^49.1.0/plain_result" },
   "exports": "./mod.ts"
 }
