@@ -1,36 +1,43 @@
+/**
+ * Timestamp string whose format is `YYYY-MM-DDTHH:mm:ssZ`
+ */
 export type Timestamp = string;
 
-/** networkからdataをとってくる処理
+/** Represents {@linkcode fetch}
  *
- * interfaceは`fetch()`と同じ
+ * This type can return `undefined`, which is useful for implementing `fetch` using Cache API.
  */
-export type Fetch = (
-  input: string | Request,
+export type Fetch<R extends Response | undefined> = (
+  input: RequestInfo | URL,
   init?: RequestInit,
-) => Promise<Response>;
+) => Promise<R>;
 
-/** 全てのREST APIに共通するopitons */
-export interface BaseOptions {
+/** Options common to all Gyazo API */
+export interface BaseOptions<R extends Response | undefined> {
   /** データの取得に使う処理
    *
    * @default fetch
    */
-  fetch?: Fetch;
+  fetch?: Fetch<R>;
 }
 
-/** OAuth API用options */
-export interface OAuthOptions extends BaseOptions {
-  /** user accountに紐付いたaccess token */
+/** Options for Gyazo API which requires OAuth */
+export interface OAuthOptions<R extends Response | undefined>
+  extends BaseOptions<R> {
+  /** an access token associated with the Gyazo user account */
   accessToken: string;
 }
 
-/** BaseOptionsの既定値を埋める */
-export const setDefaults = <T extends BaseOptions = BaseOptions>(
+/** Set default values for {@linkcode BaseOptions}
+ *
+ * @internal
+ */
+export const setDefaults = <
+  // deno-lint-ignore no-explicit-any
+  T extends BaseOptions<any> = BaseOptions<Response>,
+>(
   options: T,
-): Omit<T, "fetch"> & Required<Pick<BaseOptions, "fetch">> => {
+): Omit<T, "fetch"> & Required<Pick<T, "fetch">> => {
   const { fetch = globalThis.fetch, ...rest } = options;
   return { fetch, ...rest };
 };
-
-export const isObject = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null;
