@@ -38,8 +38,7 @@ export type ResponseOfEndpoint<
  * Type-safe {@linkcode Response} object
  *
  * @typeParam Status Available [HTTP status codes](https://developer.mozilla.org/docs/Web/HTTP/Status)
- * @typeParam Format response format
- * @typeParam Body response body type returned by {@linkcode TargetedResponse.text} or {@linkcode TargetedResponse.json}
+ * @typeParam Body response body type returned by {@linkcode TargetedResponse.text}, {@linkcode TargetedResponse.json} or {@linkcode TargetedResponse.formData}
  */
 export interface TargetedResponse<
   Status extends number,
