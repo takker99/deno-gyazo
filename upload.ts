@@ -12,13 +12,13 @@ export interface UploadInit<R extends Response | undefined>
   extends OAuthOptions<R> {
   /** the image title
    *
-   * Gyazoの"From xxx"欄に表示される
+   * This is displayed in the "From xxx" field of Gyazo webpages.
    */
   title?: string;
 
   /** the description of the image
    *
-   * Gyazoのhashtagを書き込む場所に表示される
+   * This is displayed in the "Description" field of Gyazo webpages.
    */
   description?: string;
 
@@ -27,7 +27,10 @@ export interface UploadInit<R extends Response | undefined>
 
   /** whether to make the metadata of the image public
    *
-   * @default false (private)
+   * - `true`: public
+   * - `false`: private
+   *
+   * @default {false}
    */
   metadataIsPublic?: boolean;
 
@@ -66,12 +69,12 @@ export interface UploadResult {
   created_at: Timestamp;
 }
 
-/** Gyazoへ画像をuploadする
+/** Upload an image to Gyazo
  *
- * For more informaion, see https://gyazo.com/api/docs/image#upload
+ * @see https://gyazo.com/api/docs/image#upload
  *
- * @param image uploadする画像データ
- * @param init tokenとmetadata
+ * @param image image data to upload
+ * @param init access token and metadata
  */
 export const upload = <R extends Response | undefined>(
   image: Blob,

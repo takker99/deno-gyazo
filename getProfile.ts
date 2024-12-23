@@ -19,9 +19,11 @@ export interface Profile {
   profile_image: string;
 }
 
-/** get user profile
+/** get a Gyazo user profile
  *
- * @param init accessTokeなど
+ * @see https://gyazo.com/api/docs/user#user
+ *
+ * @param init accessToken etc.
  */
 export const getProfile = <R extends Response | undefined>(
   init: OAuthOptions<R>,

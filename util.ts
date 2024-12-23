@@ -12,7 +12,7 @@ export type Fetch<R extends Response | undefined> = (
   init?: RequestInit,
 ) => Promise<R>;
 
-/** 全てのREST APIに共通するopitons */
+/** Options common to all Gyazo API */
 export interface BaseOptions<R extends Response | undefined> {
   /** データの取得に使う処理
    *
@@ -21,14 +21,14 @@ export interface BaseOptions<R extends Response | undefined> {
   fetch?: Fetch<R>;
 }
 
-/** OAuth API用options */
+/** Options for Gyazo API which requires OAuth */
 export interface OAuthOptions<R extends Response | undefined>
   extends BaseOptions<R> {
-  /** user accountに紐付いたaccess token */
+  /** an access token associated with the Gyazo user account */
   accessToken: string;
 }
 
-/** BaseOptionsの既定値を埋める
+/** Set default values for {@linkcode BaseOptions}
  *
  * @internal
  */

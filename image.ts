@@ -54,10 +54,12 @@ export interface Image {
   created_at: Timestamp;
 }
 
-/** get an image
+/** get an image information
+ *
+ * @see https://gyazo.com/api/docs/image#Image
  *
  * @param imageId image id
- * @param init accessTokeなど
+ * @param init accessToken etc.
  */
 export const getImage = <R extends Response | undefined>(
   imageId: string,
@@ -88,7 +90,7 @@ export const getImage = <R extends Response | undefined>(
   >;
 };
 
-/** the options for `getImages()` */
+/** Options for {@linkcode getImages} */
 export interface GetImagesInit<R extends Response | undefined>
   extends OAuthOptions<R> {
   /** 画像一覧のページ番号
@@ -103,9 +105,11 @@ export interface GetImagesInit<R extends Response | undefined>
   per?: number;
 }
 
-/** get images
+/** get image list of the Gyazo user
  *
- * @param init accessTokeなど
+ * @see https://gyazo.com/api/docs/image#list
+ *
+ * @param init accessToken etc.
  */
 export const getImages = <R extends Response | undefined>(
   init: GetImagesInit<R>,
@@ -159,8 +163,10 @@ export const getUserType = (
 
 /** delete an image
  *
+ * @see https://gyazo.com/api/docs/image#delete
+ *
  * @param imageId image id
- * @param init accessTokeなど
+ * @param init accessToken etc.
  */
 export const deleteImage = <R extends Response | undefined>(
   imageId: string,
