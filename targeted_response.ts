@@ -14,7 +14,11 @@ export type { StatusCode, SuccessfulStatus };
  *   404: { error: "Not Found" },
  *   500: string,
  * }>;
- * type _ = AssertTrue<IsExact<MappedResponse, TargetedResponse<200, { success: true }> | TargetedResponse<404, { error: "Not Found" }> | TargetedResponse<500, string>>>;
+ * type _ = AssertTrue<IsExact<MappedResponse,
+ *     TargetedResponse<200, { success: true }>
+ *   | TargetedResponse<404, { error: "Not Found" }>
+ *   | TargetedResponse<500, string>
+ * >>;
  * ```
  */
 export type ResponseOfEndpoint<
