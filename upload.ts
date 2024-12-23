@@ -1,9 +1,15 @@
 import { type OAuthOptions, setDefaults, type Timestamp } from "./util.ts";
-import { checkResponse, type GyazoAPIError } from "./error.ts";
-import { createOk, isErr, type Result, unwrapOk } from "result";
+import type { GyazoAPIError } from "./error.ts";
+import type {
+  ClientErrorStatus,
+  StatusCode,
+  SuccessfulStatus,
+} from "@std/http/status";
+import type { ResponseOfEndpoint } from "./targeted_response.ts";
 
 /** metadata and access tokens */
-export interface UploadInit extends OAuthOptions {
+export interface UploadInit<R extends Response | undefined>
+  extends OAuthOptions<R> {
   /** the image title
    *
    * Gyazoの"From xxx"欄に表示される
@@ -35,7 +41,8 @@ export interface UploadInit extends OAuthOptions {
   app?: string;
 }
 
-/** the result of `upload()`
+/**
+ * the result of {@linkcode upload}
  *
  * this includes URLs of the uploaded image
  */
@@ -66,10 +73,17 @@ export interface UploadResult {
  * @param image uploadする画像データ
  * @param init tokenとmetadata
  */
-export const upload = async (
+export const upload = <R extends Response | undefined>(
   image: Blob,
-  init: UploadInit,
-): Promise<Result<UploadResult, GyazoAPIError>> => {
+  init: UploadInit<R>,
+): Promise<
+  | ResponseOfEndpoint<
+    & { 200: UploadResult }
+    & Record<ClientErrorStatus, GyazoAPIError>
+    & Record<Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>, string>
+  >
+  | (undefined extends R ? undefined : never)
+> => {
   const {
     title,
     description,
@@ -93,7 +107,7 @@ export const upload = async (
   if (metadataIsPublic) formData.append("metadata_is_public", "true");
   if (created !== undefined) formData.append("created_at", `${created}`);
 
-  const res = await fetch(
+  return fetch(
     "https://upload.gyazo.com/api/upload",
     {
       method: "POST",
@@ -101,9 +115,15 @@ export const upload = async (
       credentials: "omit",
       body: formData,
     },
-  );
-
-  const checked = await checkResponse(res);
-  if (isErr(checked)) return checked;
-  return createOk(JSON.parse(unwrapOk(checked)) as UploadResult);
+  ) as Promise<
+    | ResponseOfEndpoint<
+      & { 200: UploadResult }
+      & Record<ClientErrorStatus, GyazoAPIError>
+      & Record<
+        Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>,
+        string
+      >
+    >
+    | (undefined extends R ? undefined : never)
+  >;
 };

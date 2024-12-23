@@ -1,22 +1,17 @@
 name: ci
 
-env:
-  DENO_VERSION: 1.x
-
 on: [push, pull_request]
+
+env:
+  DENO_VERSION: 2.x
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Deno
-        uses: denoland/setup-deno@v1
+      - uses: denoland/setup-deno@v2
         with:
           deno-version: ${{ env.DENO_VERSION }}
-      - name: Check fmt
-        run: deno task fmt --check
-      - name: Run lint
-        run: deno task lint
-      - name: Run type check
+      - name: Check all
         run: deno task check

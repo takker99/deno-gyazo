@@ -1,6 +1,14 @@
 import { type OAuthOptions, setDefaults, type Timestamp } from "./util.ts";
-import { checkResponse, type GyazoAPIError } from "./error.ts";
-import { createOk, isErr, type Result, unwrapOk } from "result";
+import type {
+  ResponseOfEndpoint,
+  TargetedResponse,
+} from "./targeted_response.ts";
+import type {
+  ClientErrorStatus,
+  StatusCode,
+  SuccessfulStatus,
+} from "@std/http/status";
+import type { GyazoAPIError } from "./error.ts";
 
 /** Image data */
 export interface Image {
@@ -11,14 +19,14 @@ export interface Image {
   /** image  url */
   url: string;
   /** OCR result */
-  ocr: {
+  ocr?: {
     /** language of OCR text*/
     locale: string;
     /** OCR text*/
     description: string;
   } | { locale: null; description: "" };
   /** image metadata */
-  metadata: {
+  metadata?: {
     /** app name which create the image */
     app: string | null;
     /** image title */
@@ -51,29 +59,38 @@ export interface Image {
  * @param imageId image id
  * @param init accessTokeなど
  */
-export const getImage = async (
+export const getImage = <R extends Response | undefined>(
   imageId: string,
-  init: OAuthOptions,
+  init: OAuthOptions<R>,
 ): Promise<
-  Result<
-    Omit<Image, "ocr" | "metadata"> & Partial<Pick<Image, "ocr" | "metadata">>,
-    GyazoAPIError
+  | ResponseOfEndpoint<
+    & { 200: Image }
+    & Record<ClientErrorStatus, GyazoAPIError>
+    & Record<Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>, string>
   >
+  | (undefined extends R ? undefined : never)
 > => {
   const { accessToken, fetch } = setDefaults(init ?? {});
 
   const path =
     `https://api.gyazo.com/api/images/${imageId}?access_token=${accessToken}`;
-  const res = await fetch(path);
 
-  const checked = await checkResponse(res);
-  if (isErr(checked)) return checked;
-
-  return createOk(JSON.parse(unwrapOk(checked)) as Image);
+  return fetch(path) as Promise<
+    | ResponseOfEndpoint<
+      & { 200: Image }
+      & Record<ClientErrorStatus, GyazoAPIError>
+      & Record<
+        Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>,
+        string
+      >
+    >
+    | (undefined extends R ? undefined : never)
+  >;
 };
 
 /** the options for `getImages()` */
-export interface GetImagesInit extends OAuthOptions {
+export interface GetImagesInit<R extends Response | undefined>
+  extends OAuthOptions<R> {
   /** 画像一覧のページ番号
    *
    * @default 1
@@ -86,74 +103,90 @@ export interface GetImagesInit extends OAuthOptions {
   per?: number;
 }
 
-export interface ImageList {
-  /* the total number of images */
-  count: number;
-  /* current image page */
-  page: number;
-  /** image count per page */
-  per: number;
-  /** 詳細不明 */
-  userType: string;
-  images: Image[];
-}
-
 /** get images
  *
  * @param init accessTokeなど
  */
-export const getImages = async (
-  init: GetImagesInit,
-): Promise<Result<ImageList, GyazoAPIError>> => {
+export const getImages = <R extends Response | undefined>(
+  init: GetImagesInit<R>,
+): Promise<
+  | ResponseOfEndpoint<
+    & { 200: Image[] }
+    & Record<ClientErrorStatus, GyazoAPIError>
+    & Record<Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>, string>
+  >
+  | (undefined extends R ? undefined : never)
+> => {
   const { accessToken, fetch, page, per } = setDefaults(init ?? {});
-  const params = new URLSearchParams();
-  params.append("access_token", accessToken);
-  if (per !== undefined) {
-    params.append("per_page", `${Math.max(1, Math.min(100, Math.round(per)))}`);
-  }
-  if (page !== undefined) {
-    params.append("page", `${page}`);
-  }
+  const params = new URLSearchParams({
+    "access_token": accessToken,
+    ...(per !== undefined
+      ? { "per_page": `${Math.max(1, Math.min(100, Math.round(per)))}` }
+      : {}),
+    ...(page !== undefined ? { "page": `${page}` } : {}),
+  });
 
-  const path = `https://api.gyazo.com/api/images?${params.toString()}`;
-  const res = await fetch(path);
-
-  const checked = await checkResponse(res);
-  if (isErr(checked)) return checked;
-
-  const images: Image[] = JSON.parse(unwrapOk(checked));
-  const count = parseInt(res.headers.get("X-Total-Count") ?? "0");
-  const currentPage = parseInt(res.headers.get("X-Current-Page") ?? "0");
-  const perPage = parseInt(res.headers.get("X-Per-Page") ?? "0");
-  const userType = res.headers.get("X-User-Type") ?? "";
-
-  return createOk({ images, count, page: currentPage, per: perPage, userType });
+  const path = `https://api.gyazo.com/api/images?${params}`;
+  return fetch(path) as Promise<
+    | ResponseOfEndpoint<
+      & { 200: Image[] }
+      & Record<ClientErrorStatus, GyazoAPIError>
+      & Record<
+        Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>,
+        string
+      >
+    >
+    | (undefined extends R ? undefined : never)
+  >;
 };
+
+/** get total count of images */
+export const getTotalCount = (
+  response: TargetedResponse<200, Image[]>,
+): number => parseInt(response.headers.get("X-Total-Count") ?? "0");
+/** get total page count */
+export const getCurrentPage = (
+  response: TargetedResponse<200, Image[]>,
+): number => parseInt(response.headers.get("X-Current-Page") ?? "0");
+/** get total page count */
+export const getPerPage = (
+  response: TargetedResponse<200, Image[]>,
+): number => parseInt(response.headers.get("X-Per-Page") ?? "0");
+/** get total page count */
+export const getUserType = (
+  response: TargetedResponse<200, Image[]>,
+): string => response.headers.get("X-User-Type") ?? "";
 
 /** delete an image
  *
  * @param imageId image id
  * @param init accessTokeなど
  */
-export const deleteImage = async (
+export const deleteImage = <R extends Response | undefined>(
   imageId: string,
-  init: OAuthOptions,
+  init: OAuthOptions<R>,
 ): Promise<
-  Result<
-    Pick<Image, "image_id" | "type">,
-    GyazoAPIError
+  | ResponseOfEndpoint<
+    & { 200: Pick<Image, "image_id" | "type"> }
+    & Record<ClientErrorStatus, GyazoAPIError>
+    & Record<Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>, string>
   >
+  | (undefined extends R ? undefined : never)
 > => {
   const { accessToken, fetch } = setDefaults(init ?? {});
 
   const path =
     `https://api.gyazo.com/api/images/${imageId}?access_token=${accessToken}`;
-  const res = await fetch(path, { method: "DELETE" });
 
-  const checked = await checkResponse(res);
-  if (isErr(checked)) return checked;
-
-  return createOk(
-    JSON.parse(unwrapOk(checked)) as Pick<Image, "image_id" | "type">,
-  );
+  return fetch(path, { method: "DELETE" }) as Promise<
+    | ResponseOfEndpoint<
+      & { 200: Pick<Image, "image_id" | "type"> }
+      & Record<ClientErrorStatus, GyazoAPIError>
+      & Record<
+        Exclude<StatusCode, SuccessfulStatus | ClientErrorStatus>,
+        string
+      >
+    >
+    | (undefined extends R ? undefined : never)
+  >;
 };

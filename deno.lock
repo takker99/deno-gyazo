@@ -1,20 +1,28 @@
 {
-  "version": "3",
-  "packages": {
-    "specifiers": {
-      "npm:option-t@^49.1.0": "npm:option-t@49.1.0"
+  "version": "4",
+  "specifiers": {
+    "jsr:@std/http@^1.0.12": "1.0.12",
+    "jsr:@std/json@1": "1.0.1",
+    "jsr:@std/json@^1.0.1": "1.0.1",
+    "jsr:@std/testing@1": "1.0.8",
+    "jsr:@std/testing@^1.0.8": "1.0.8"
+  },
+  "jsr": {
+    "@std/http@1.0.12": {
+      "integrity": "85246d8bfe9c8e2538518725b158bdc31f616e0869255f4a8d9e3de919cab2aa"
     },
-    "npm": {
-      "option-t@49.1.0": {
-        "integrity": "sha512-K5o4+D8rSE1VcmfwrieRZWyShPxX27NEGuZPT11S4CbvjE73YUDR/sanKAYnhVRj6Hn1mKcjfhjhbOCD2ef3qg==",
-        "dependencies": {}
-      }
+    "@std/json@1.0.1": {
+      "integrity": "1f0f70737e8827f9acca086282e903677bc1bb0c8ffcd1f21bca60039563049f"
+    },
+    "@std/testing@1.0.8": {
+      "integrity": "ceef535808fb7568e91b0f8263599bd29b1c5603ffb0377227f00a8ca9fe42a2"
     }
   },
-  "remote": {},
   "workspace": {
     "dependencies": [
-      "npm:option-t@^49.1.0"
+      "jsr:@std/http@^1.0.12",
+      "jsr:@std/json@^1.0.1",
+      "jsr:@std/testing@^1.0.8"
     ]
   }
 }
