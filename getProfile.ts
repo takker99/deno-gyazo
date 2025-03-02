@@ -25,7 +25,7 @@ export interface Profile {
  *
  * @param init accessToken etc.
  */
-export const getProfile = <R extends Response | undefined>(
+export const getProfile = <R extends Response | undefined = Response>(
   init: OAuthOptions<R>,
 ): Promise<
   | ResponseOfEndpoint<
