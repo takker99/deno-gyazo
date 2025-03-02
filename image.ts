@@ -61,7 +61,7 @@ export interface Image {
  * @param imageId image id
  * @param init accessToken etc.
  */
-export const getImage = <R extends Response | undefined>(
+export const getImage = <R extends Response | undefined = Response>(
   imageId: string,
   init: OAuthOptions<R>,
 ): Promise<

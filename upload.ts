@@ -76,7 +76,7 @@ export interface UploadResult {
  * @param image image data to upload
  * @param init access token and metadata
  */
-export const upload = <R extends Response | undefined>(
+export const upload = <R extends Response | undefined = Response>(
   image: Blob,
   init: UploadInit<R>,
 ): Promise<
