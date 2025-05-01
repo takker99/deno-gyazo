@@ -5,8 +5,8 @@
   ],
   "exports": "./mod.ts",
   "imports": {
-    "@std/http": "jsr:@std/http@^1.0.14",
-    "@std/json": "jsr:@std/json@^1.0.1",
+    "@std/http": "jsr:@std/http@^1.0.15",
+    "@std/json": "jsr:@std/json@^1.0.2",
     "@std/testing": "jsr:@std/testing@^1.0.11"
   },
   "name": "@takker/gyazo",
