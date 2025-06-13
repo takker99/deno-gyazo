@@ -2,21 +2,22 @@
   "version": "5",
   "specifiers": {
     "jsr:@std/assert@^1.0.13": "1.0.13",
-    "jsr:@std/cli@^1.0.18": "1.0.19",
+    "jsr:@std/cli@^1.0.20": "1.0.20",
     "jsr:@std/data-structures@^1.0.8": "1.0.8",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/fmt@^1.0.8": "1.0.8",
-    "jsr:@std/fs@^1.0.17": "1.0.18",
+    "jsr:@std/fs@^1.0.18": "1.0.18",
     "jsr:@std/html@^1.0.4": "1.0.4",
-    "jsr:@std/http@^1.0.17": "1.0.17",
+    "jsr:@std/http@^1.0.18": "1.0.18",
     "jsr:@std/internal@^1.0.6": "1.0.8",
     "jsr:@std/internal@^1.0.8": "1.0.8",
     "jsr:@std/json@^1.0.2": "1.0.2",
     "jsr:@std/media-types@^1.1.0": "1.1.0",
     "jsr:@std/net@^1.0.4": "1.0.4",
     "jsr:@std/path@^1.1.0": "1.1.0",
-    "jsr:@std/streams@^1.0.9": "1.0.9",
-    "jsr:@std/testing@^1.0.13": "1.0.13"
+    "jsr:@std/streams@^1.0.10": "1.0.10",
+    "jsr:@std/streams@^1.0.9": "1.0.10",
+    "jsr:@std/testing@^1.0.14": "1.0.14"
   },
   "jsr": {
     "@std/assert@1.0.13": {
@@ -25,8 +26,8 @@
         "jsr:@std/internal@^1.0.6"
       ]
     },
-    "@std/cli@1.0.19": {
-      "integrity": "b3601a54891f89f3f738023af11960c4e6f7a45dc76cde39a6861124cba79e88"
+    "@std/cli@1.0.20": {
+      "integrity": "a8c384a2c98cec6ec6a2055c273a916e2772485eb784af0db004c5ab8ba52333"
     },
     "@std/data-structures@1.0.8": {
       "integrity": "2fb7219247e044c8fcd51341788547575653c82ae2c759ff209e0263ba7d9b66"
@@ -46,17 +47,18 @@
     "@std/html@1.0.4": {
       "integrity": "eff3497c08164e6ada49b7f81a28b5108087033823153d065e3f89467dd3d50e"
     },
-    "@std/http@1.0.17": {
-      "integrity": "98aec8ab4080d95c21f731e3008f69c29c5012d12f1b4e553f85935db601569f",
+    "@std/http@1.0.18": {
+      "integrity": "8d9546aa532c52a0cf318c74616db0638b4c1073405355d1b14f9e1591dccf20",
       "dependencies": [
         "jsr:@std/cli",
         "jsr:@std/encoding",
         "jsr:@std/fmt",
+        "jsr:@std/fs",
         "jsr:@std/html",
         "jsr:@std/media-types",
         "jsr:@std/net",
         "jsr:@std/path",
-        "jsr:@std/streams"
+        "jsr:@std/streams@^1.0.10"
       ]
     },
     "@std/internal@1.0.8": {
@@ -65,7 +67,7 @@
     "@std/json@1.0.2": {
       "integrity": "d9e5497801c15fb679f55a2c01c7794ad7a5dfda4dd1bebab5e409cb5e0d34d4",
       "dependencies": [
-        "jsr:@std/streams"
+        "jsr:@std/streams@^1.0.9"
       ]
     },
     "@std/media-types@1.1.0": {
@@ -80,8 +82,11 @@
     "@std/streams@1.0.9": {
       "integrity": "a9d26b1988cdd7aa7b1f4b51e1c36c1557f3f252880fa6cc5b9f37078b1a5035"
     },
-    "@std/testing@1.0.13": {
-      "integrity": "74418be16f627dfe996937ab0ffbdbda9c1f35534b78724658d981492f121e71",
+    "@std/streams@1.0.10": {
+      "integrity": "75c0b1431873cd0d8b3d679015220204d36d3c7420d93b60acfc379eb0dc30af"
+    },
+    "@std/testing@1.0.14": {
+      "integrity": "144b3737105b9071cb50c957681f58a1b8ec0f3e5b19ad830f401c5fa931e8f0",
       "dependencies": [
         "jsr:@std/assert",
         "jsr:@std/data-structures",
@@ -93,9 +98,9 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/http@^1.0.17",
+      "jsr:@std/http@^1.0.18",
       "jsr:@std/json@^1.0.2",
-      "jsr:@std/testing@^1.0.13"
+      "jsr:@std/testing@^1.0.14"
     ]
   }
 }
